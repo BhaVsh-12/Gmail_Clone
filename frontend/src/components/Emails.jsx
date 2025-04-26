@@ -18,7 +18,7 @@ const Emails = ({ category, refreshTrigger }) => {
     setError(null);
     try {
       const response = await Api.get(`/api/v1/email/${type}/${currentCategory}`, {
-        withCredentials: true,
+        
       });
       dispatch(setEmails(response.data.emails));
     } catch (err) {
