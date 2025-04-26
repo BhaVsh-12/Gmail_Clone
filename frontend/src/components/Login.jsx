@@ -31,7 +31,7 @@ const Login = () => {
 
         try {
             const res = await Api.post("/api/v1/user/login", input, {
-               
+                withCredentials: true
             });
 
             if (res.data.success) {
