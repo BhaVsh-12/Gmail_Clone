@@ -1,16 +1,17 @@
-import axios from 'axios';
+import axios from 'axios'; // Keep if you use it elsewhere, otherwise not strictly needed here if you only use Api
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setAuthUser } from '../redux/appSlice';
-import Api from "../Api";
+import Api from "../Api"; // Your updated Axios instance
+
 const Login = () => {
     const [input, setInput] = useState({
         email: "",
         password: ""
     });
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -20,9 +21,8 @@ const Login = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        setLoading(true); // Set loading to true when submitting
-        
-        // Basic validation
+        setLoading(true);
+
         if (!input.email || !input.password) {
             toast.error('Please fill in all fields');
             setLoading(false);
@@ -30,12 +30,13 @@ const Login = () => {
         }
 
         try {
-            const res = await Api.post("/api/v1/user/login", input, {
-                withCredentials: true
-            });
+           
+            const res = await Api.post("/api/v1/user/login", input);
 
             if (res.data.success) {
-                dispatch(setAuthUser(res.data.user));
+                
+                localStorage.setItem('token', res.data.token);
+                dispatch(setAuthUser(res.data.user)); 
                 navigate("/");
                 toast.success(res.data.message);
             }
@@ -43,18 +44,18 @@ const Login = () => {
             console.log(error);
             toast.error(error.response?.data?.message || 'Login failed. Please try again.');
         } finally {
-            setLoading(false); // Reset loading state
+            setLoading(false);
         }
     }
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-50 p-4'>
-            <form 
-                onSubmit={submitHandler} 
+            <form
+                onSubmit={submitHandler}
                 className='flex flex-col gap-4 bg-white p-6 rounded-lg shadow-md w-full max-w-md'
             >
                 <h1 className='font-bold text-2xl text-center text-gray-800 mb-2'>Login</h1>
-                
+
                 <div className='space-y-2'>
                     <label htmlFor="email" className='block text-sm font-medium text-gray-700'>
                         Email
@@ -70,7 +71,7 @@ const Login = () => {
                         required
                     />
                 </div>
-                
+
                 <div className='space-y-2'>
                     <label htmlFor="password" className='block text-sm font-medium text-gray-700'>
                         Password
@@ -87,7 +88,7 @@ const Login = () => {
                         minLength="6"
                     />
                 </div>
-                
+
                 <button
                     type="submit"
                     disabled={loading}
@@ -105,19 +106,19 @@ const Login = () => {
                         </span>
                     ) : 'Login'}
                 </button>
-                
+
                 <div className='text-center mt-4 text-sm text-gray-600'>
                     <p>Don't have an account?{' '}
-                        <Link 
-                            to="/signup" 
+                        <Link
+                            to="/signup"
                             className='text-blue-600 hover:text-blue-800 hover:underline'
                         >
                             Sign up
                         </Link>
                     </p>
                     <p className='mt-2'>
-                        <Link 
-                            to="/forgot-password" 
+                        <Link
+                            to="/forgot-password"
                             className='text-blue-600 hover:text-blue-800 hover:underline'
                         >
                             Forgot password?
