@@ -19,7 +19,7 @@ app.use(express.json());
 
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigins = ['http://localhost:5174', 'https://gmail-clone-sandy.vercel.app'];
+    const allowedOrigins = ['http://localhost:5173', 'https://gmail-clone-sandy.vercel.app'];
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
